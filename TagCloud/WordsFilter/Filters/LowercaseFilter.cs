@@ -1,7 +1,9 @@
-﻿namespace TagCloud.WordsFilter.Filters;
+﻿using FuncTools;
+
+namespace TagCloud.WordsFilter.Filters;
 
 public class LowercaseFilter : IWordsFilter
 {
-    public List<string> ApplyFilter(List<string> words) 
+    public Result<List<string>> ApplyFilter(List<string> words) 
         => words.Select(w => w.ToLower()).ToList();
 }

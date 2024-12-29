@@ -1,9 +1,11 @@
-﻿namespace TagCloud.WordsFilter;
+﻿using FuncTools;
+
+namespace TagCloud.WordsFilter;
 
 public interface IWordsFilter
 {
     /*
      * Apply some function on words list
      */
-    List<string> ApplyFilter(List<string> words);
+    Result<List<string>> ApplyFilter(List<string> words);
 }

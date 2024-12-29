@@ -30,5 +30,4 @@ public class CsvFileReader(string filePath, CultureInfo cultureInfo) : BaseFileR
         using var csv = new CsvReader(reader, configuration);
         return csv.GetRecords<TableCell>().Select(cell => cell.Word).ToList();
     }
-    
 }
