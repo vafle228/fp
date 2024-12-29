@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using FuncTools;
 
 namespace TagCloud.ImageSaver;
 
@@ -11,14 +12,15 @@ public class BitmapFileSaver(string imageName, string imageFormat) : IImageSaver
         : this(settings.ImageName, settings.ImageFormat)
     { }
     
-    public string Save(Bitmap image)
+    public Result<string> Save(Bitmap image) 
+        => !supportedFormats.Contains(imageFormat) 
+            ? Result.Fail<string>($"Unsupported image format: {imageFormat}")
+            : $"{imageName}.{imageFormat}".AsResult().Then(n => SaveImage(image, n));
+
+    private static string SaveImage(Bitmap image, string name)
     {
-        if (!supportedFormats.Contains(imageFormat))
-            throw new ArgumentException($"Unsupported image format: {imageFormat}");
-        
-        var fullImageName = $"{imageName}.{imageFormat}";
-        image.Save(fullImageName);
-        return Path.Combine(Directory.GetCurrentDirectory(), fullImageName);
+        image.Save(name);
+        return Path.Combine(Directory.GetCurrentDirectory(), name);
     }
 }
 #pragma warning restore CA1416
