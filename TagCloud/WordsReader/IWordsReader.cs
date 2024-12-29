@@ -1,9 +1,11 @@
-﻿namespace TagCloud.WordsReader;
+﻿using FuncTools;
+
+namespace TagCloud.WordsReader;
 
 public interface IWordsReader
 {
     /*
      * Reads data from specific source
      */
-    List<string> ReadWords();
+    Result<List<string>> ReadWords();
 }

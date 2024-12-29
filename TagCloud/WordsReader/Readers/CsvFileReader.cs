@@ -2,11 +2,12 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
+using FuncTools;
 using TagCloud.WordsReader.Settings;
 
 namespace TagCloud.WordsReader.Readers;
 
-public class CsvFileReader(string path, CultureInfo cultureInfo) : IWordsReader
+public class CsvFileReader(string filePath, CultureInfo cultureInfo) : BaseFileReader(filePath)
 {
     private class TableCell
     {
@@ -18,7 +19,7 @@ public class CsvFileReader(string path, CultureInfo cultureInfo) : IWordsReader
         : this(settings.FilePath, settings.Culture)
     { }
     
-    public List<string> ReadWords()
+    public override Result<List<string>> ReadFromExistingFile(string path) 
     {
         var configuration = new CsvConfiguration(cultureInfo)
         {
