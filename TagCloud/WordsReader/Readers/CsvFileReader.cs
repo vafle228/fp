@@ -18,8 +18,8 @@ public class CsvFileReader(string filePath, CultureInfo cultureInfo) : BaseFileR
     public CsvFileReader(CsvFileReaderSettings settings)
         : this(settings.FilePath, settings.Culture)
     { }
-    
-    public override Result<List<string>> ReadFromExistingFile(string path) 
+
+    protected override Result<List<string>> ReadFromExistingFile(string path) 
     {
         var configuration = new CsvConfiguration(cultureInfo)
         {

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using FuncTools;
 using TagCloud.CloudLayouter.PointLayouter.PointGenerator;
 using TagCloud.CloudLayouter.Settings;
 
@@ -15,7 +16,7 @@ public class PointCloudLayouter(Point center, IPointGenerator pointGenerator) : 
 
     public Point Center { get; } = center;
 
-    public Rectangle PutNextRectangle(Size rectangleSize)
+    public Result<Rectangle> PutNextRectangle(Size rectangleSize)
     {
         Rectangle placedRect;
         try

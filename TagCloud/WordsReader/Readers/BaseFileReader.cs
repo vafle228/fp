@@ -9,5 +9,5 @@ public abstract class BaseFileReader(string path) : IWordsReader
             ? ReadFromExistingFile(path)
             : Result.Fail<List<string>>("No file found");
 
-    public abstract Result<List<string>> ReadFromExistingFile(string path);
+    protected abstract Result<List<string>> ReadFromExistingFile(string path);
 }

@@ -9,8 +9,8 @@ public class WordFileReader(string filePath) : BaseFileReader(filePath)
     public WordFileReader(WordFileReaderSettings settings)
         : this(settings.FilePath)
     { }
-    
-    public override Result<List<string>> ReadFromExistingFile(string path) 
+
+    protected override Result<List<string>> ReadFromExistingFile(string path) 
     {
         using var document = DocX.Load(path);
         var paragraphs = document.Paragraphs;

@@ -9,8 +9,8 @@ public class FileReader(string filePath, Encoding encoding) : BaseFileReader(fil
     public FileReader(FileReaderSettings settings)
         : this(settings.FilePath, settings.Encoding)
     { }
-    
-    public override Result<List<string>> ReadFromExistingFile(string path) 
+
+    protected override Result<List<string>> ReadFromExistingFile(string path) 
         => File.ReadAllLines(path, encoding)
             .Select(line => line.Split(" "))
             .SelectMany(arr => arr)

@@ -40,7 +40,7 @@ public class BitmapGenerator(Size size, FontFamily family, Color background, Col
     private void DrawTag(Font font, WordTag tag, Graphics graphics)
         => font.AsResult()
             .Then(f => CeilSize(graphics.MeasureString(tag.Word, f)))
-            .Then(r => FitsInRange(layouter.PutNextRectangle(r)))
+            .Then(layouter.PutNextRectangle).Then(FitsInRange)
             .Then(r => graphics.DrawString(tag.Word, font, brush, r));
     
     private Result<Rectangle> FitsInRange(Rectangle rect)
