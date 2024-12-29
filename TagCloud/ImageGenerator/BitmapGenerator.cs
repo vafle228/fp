@@ -37,7 +37,7 @@ public class BitmapGenerator(Size size, FontFamily family, Color background, Col
     private IEnumerable<Result<None>> ProcessTags(List<WordTag> tags, Graphics graphics)
         => tags.Select(t => BuildFont(t.FontSize).Then(f => DrawTag(f, t, graphics)));
 
-    private void DrawTag(Font font, WordTag tag, Graphics graphics)
+    private Result<None> DrawTag(Font font, WordTag tag, Graphics graphics)
         => font.AsResult()
             .Then(f => CeilSize(graphics.MeasureString(tag.Word, f)))
             .Then(layouter.PutNextRectangle).Then(FitsInRange)
@@ -46,7 +46,7 @@ public class BitmapGenerator(Size size, FontFamily family, Color background, Col
     private Result<Rectangle> FitsInRange(Rectangle rect)
         => new Rectangle(Point.Empty, size).Contains(rect) 
             ? Result.Ok(rect) 
-            : Result.Fail<Rectangle>("Cannot fit in the given rectangle");
+            : Result.Fail<Rectangle>("Cannot fit in the given size");
     
     private static Size CeilSize(SizeF size) 
         => new((int)size.Width + 1, (int)size.Height + 1);

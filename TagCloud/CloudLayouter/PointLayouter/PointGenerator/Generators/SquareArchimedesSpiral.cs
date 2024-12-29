@@ -40,6 +40,7 @@ public class SquareArchimedesSpiral : IPointGenerator
                 pointsToPlace = neededPoints;
             }
         }
+        // ReSharper disable once IteratorNeverReturns
     }
     
     private Size GetOffsetSize(Direction direction) => direction switch

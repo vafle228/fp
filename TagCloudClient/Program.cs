@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using CommandLine;
+using FuncTools;
 using TagCloud;
 using TagCloud.CloudLayouter;
 using TagCloud.CloudLayouter.PointLayouter;
@@ -23,8 +24,9 @@ internal class Program
             .WithParsed(settings =>
             {
                 var container = BuildContainer(settings);
-                var generator = container.Resolve<CloudGenerator>();
-                Console.WriteLine("File saved in " + generator.GenerateTagCloud());
+                container.Resolve<CloudGenerator>().GenerateTagCloud()
+                    .Then(p => Console.WriteLine("File saved in " + p))
+                    .OnFail(err => Console.WriteLine("Generating finished with error: " + err));
             });
     }
 
