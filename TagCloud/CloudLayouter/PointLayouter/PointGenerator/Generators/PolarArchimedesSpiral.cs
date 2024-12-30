@@ -1,30 +1,29 @@
 ﻿using System.Drawing;
+using FuncTools;
 using TagCloud.CloudLayouter.Settings.Generators;
 
 namespace TagCloud.CloudLayouter.PointLayouter.PointGenerator.Generators;
 
-public class PolarArchimedesSpiral : IPointGenerator
+public class PolarArchimedesSpiral(double radius, double angleOffset) : IPointGenerator
 {
-    public double Radius { get; }
-    public double AngleOffset { get; }
-    
+    public double Radius { get; } = radius;
+    public double AngleOffset { get; } = angleOffset * Math.PI / 180;
+
     public PolarArchimedesSpiral(PolarSpiralSettings settings) 
         : this(settings.Radius, settings.AngleOffset) 
     { }
 
-    public PolarArchimedesSpiral(double radius, double angleOffset)
+    public Result<IEnumerable<Point>> StartFrom(Point startPoint)
     {
-        if (radius <= 0 || angleOffset <= 0)
+        if (Radius <= 0 || angleOffset <= 0)
         {
-            var argName = radius <= 0 ? nameof(radius) : nameof(angleOffset);
-            throw new ArgumentException("Spiral params should be positive.", argName);
+            var argName = Radius <= 0 ? nameof(radius) : nameof(angleOffset);
+            return Result.Fail<IEnumerable<Point>>($"Spiral params should be positive: {argName}");
         }
-        
-        Radius = radius;
-        AngleOffset = angleOffset * Math.PI / 180;
+        return PointGenerator(startPoint).AsResult();
     }
 
-    public IEnumerable<Point> StartFrom(Point startPoint)
+    private IEnumerable<Point> PointGenerator(Point startPoint)
     {
         var currentAngle = 0.0;
         while (true)

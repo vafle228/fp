@@ -17,9 +17,9 @@ public class PointCloudLayouter(Point center, IPointGenerator pointGenerator) : 
     public Point Center { get; } = center;
 
     public Result<Rectangle> PutNextRectangle(Size rectangleSize)
-        => TryPutNext(rectangleSize) is var rect && rect != Rectangle.Empty 
-            ? RememberRectangle(rect).AsResult()
-            : Result.Fail<Rectangle>("There are no more points in generator");
+        => TryPutNext(rectangleSize)
+            .Then(RememberRectangle)
+            .ReplaceError(_ => "There are no more points in generator");
     
     private Rectangle RememberRectangle(Rectangle rect)
     {
@@ -28,11 +28,13 @@ public class PointCloudLayouter(Point center, IPointGenerator pointGenerator) : 
         return rect;
     }
     
-    private Rectangle TryPutNext(Size rectangleSize) 
+    private Result<Rectangle> TryPutNext(Size rectangleSize) 
         => pointGenerator.StartFrom(Center)
-            .Except(placedPoints)
-            .Select(p => CreateRectangle(p, rectangleSize))
-            .FirstOrDefault(r => !placedRectangles.Any(r.IntersectsWith), Rectangle.Empty);
+            .Then(pointEnumerable => pointEnumerable
+                .Except(placedPoints)
+                .Select(p => CreateRectangle(p, rectangleSize))
+                .First(r => !placedRectangles.Any(r.IntersectsWith))
+            );
 
     private static Rectangle CreateRectangle(Point center, Size rectangleSize)
     {
