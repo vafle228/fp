@@ -12,7 +12,7 @@ public class LowercaseFilterTest
     public void LowercaseFilter_ApplyFilter_ShouldLowerAllWords()
     {
         List<string> words = ["Hello", "WORLD"];
-        var filtered = filter.ApplyFilter(words);
+        var filtered = filter.ApplyFilter(words).GetValueOrThrow();
         filtered.Should().BeEquivalentTo(["hello", "world"], options => options.WithStrictOrdering());
     }
 }

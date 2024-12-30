@@ -55,7 +55,7 @@ public class PointCloudLayouterTest
         var pointGenerator = new SquareArchimedesSpiral(1);
         var layouter = new PointCloudLayouter(new Point(0, 0), pointGenerator);
         
-        var rect = layouter.PutNextRectangle(squareSize);
+        var rect = layouter.PutNextRectangle(squareSize).GetValueOrThrow();
         rectangles = [rect];
         
         rect.Should().BeOfType<Rectangle>();
@@ -92,21 +92,21 @@ public class PointCloudLayouterTest
         (totalArea / claimedArea).Should().BeApproximately(1, min);
     }
 
-    private List<Rectangle> PlaceRectangles(int count, ICloudLayouter layouter)
+    private static List<Rectangle> PlaceRectangles(int count, ICloudLayouter layouter)
     {
         var rectangleSizes = Enumerable.Range(0, count)
             .Select(_ => GetRandomSize(10, 25))
-            .Select(layouter.PutNextRectangle);
+            .Select(s => layouter.PutNextRectangle(s).GetValueOrThrow());
         return rectangleSizes.ToList();
     }
 
-    private Size GetRandomSize(int min, int max)
+    private static Size GetRandomSize(int min, int max)
     {
         var random = new Random();
         return new Size(random.Next(min, max), random.Next(min, max));
     }
 
-    private Rectangle FindClaimedRectangle(List<Rectangle> rects)
+    private static Rectangle FindClaimedRectangle(List<Rectangle> rects)
     {
         var leftX = rects.Min(r => r.Left);
         var leftY = rects.Min(r => r.Top);

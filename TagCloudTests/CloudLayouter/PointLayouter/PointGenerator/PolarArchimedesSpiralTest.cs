@@ -7,7 +7,7 @@ namespace TagCloudTests.CloudLayouter.PointLayouter.PointGenerator;
 [TestFixture]
 public class PolarArchimedesSpiralTest
 {
-    private const string NOT_POSITIVE_ARGUMENT_ERROR = "Spiral params should be positive.";
+    private const string NOT_POSITIVE_ARGUMENT_ERROR = "Spiral params should be positive";
     
     [TestCase(2, 3)]
     [TestCase(10.1, 15.6)]
@@ -26,11 +26,11 @@ public class PolarArchimedesSpiralTest
     public void PolarArchimedesSpiral_ThrowError_OnNotPositiveNumber(double radius, double angleOffset)
     {
         var negativeParameter = radius <= 0 ? nameof(radius) : nameof(angleOffset);
-        var polarSpiralCtor = () => new PolarArchimedesSpiral(radius, angleOffset);
-
-        polarSpiralCtor.Should()
-            .Throw<ArgumentException>()
-            .WithMessage($"{NOT_POSITIVE_ARGUMENT_ERROR} (Parameter '{negativeParameter}')");
+        var pointGenerator = new PolarArchimedesSpiral(radius, angleOffset).StartFrom(Point.Empty);
+        
+        pointGenerator.Error.Should()
+            .BeEquivalentTo($"{NOT_POSITIVE_ARGUMENT_ERROR}: {negativeParameter}");
+        pointGenerator.IsSuccess.Should().BeFalse();
     }
     
         
@@ -44,7 +44,7 @@ public class PolarArchimedesSpiralTest
             new Point(6, 0), new Point(8, 0), new Point(10, 0)
         };
         
-        var pointGenerator = polarSpiral.StartFrom(new Point(0, 0));
+        var pointGenerator = polarSpiral.StartFrom(new Point(0, 0)).GetValueOrThrow();
         var expectedAndReceived = expected.Zip(pointGenerator);
         
         foreach (var (expectedPoint, receivedPoint) in expectedAndReceived)
@@ -59,7 +59,7 @@ public class PolarArchimedesSpiralTest
     public void PolarArchimedesSpiral_GenerateCircleLikeShape(int radius)
     {
         var polarSpiral = new PolarArchimedesSpiral(radius, 5);
-        var pointGenerator = polarSpiral.StartFrom(new Point(0, 0));
+        var pointGenerator = polarSpiral.StartFrom(new Point(0, 0)).GetValueOrThrow();
 
         for (var k = 1; k <= 10; k++)
         {

@@ -23,10 +23,9 @@ public class SquareArchimedesSpiralTest
     [TestCase(int.MinValue, Description = "Smallest step still error")]
     public void SquareArchimedesSpiral_ThrowError_OnNotPositiveNumber(int step)
     {
-        var squareSpiralCtor = () => new SquareArchimedesSpiral(step);
-        squareSpiralCtor.Should()
-            .Throw<ArgumentException>()
-            .WithMessage(NOT_POSITIVE_STEP_ERROR);
+        var pointGenerator = new SquareArchimedesSpiral(step).StartFrom(Point.Empty);
+        pointGenerator.Error.Should().BeEquivalentTo(NOT_POSITIVE_STEP_ERROR);
+        pointGenerator.IsSuccess.Should().BeFalse();
     }
     
     [Test]
@@ -39,7 +38,7 @@ public class SquareArchimedesSpiralTest
             new Point(-5, 0), new Point(-5, -5), new Point(0, -5)
         };
         
-        var pointGenerator = squareSpiral.StartFrom(new Point(0, 0));
+        var pointGenerator = squareSpiral.StartFrom(new Point(0, 0)).GetValueOrThrow();
         var expectedAndReceived = expected.Zip(pointGenerator);
         
         foreach (var (expectedPoint, receivedPoint) in expectedAndReceived)
@@ -54,7 +53,7 @@ public class SquareArchimedesSpiralTest
     public void SquareArchimedesSpiral_GenerateRectLikeShape(int step)
     {
         var squareSpiral = new SquareArchimedesSpiral(step);
-        var pointGenerator = squareSpiral.StartFrom(new Point(0, 0));
+        var pointGenerator = squareSpiral.StartFrom(new Point(0, 0)).GetValueOrThrow();
 
         for (var k = 1; k <= 50; k++)
         {

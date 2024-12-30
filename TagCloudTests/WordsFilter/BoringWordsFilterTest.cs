@@ -12,7 +12,7 @@ public class BoringWordsFilterTest
     public void BoringWordsFilter_ApplyFilter_ShouldRemovePrimitiveWords()
     {
         List<string> words = ["a", "the", "hello"];
-        var filtered = filter.ApplyFilter(words);
+        var filtered = filter.ApplyFilter(words).GetValueOrThrow();
         filtered.Should().BeEquivalentTo(["hello"], options => options.WithStrictOrdering());
     }
 }

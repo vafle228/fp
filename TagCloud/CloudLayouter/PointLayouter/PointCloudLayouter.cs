@@ -19,7 +19,7 @@ public class PointCloudLayouter(Point center, IPointGenerator pointGenerator) : 
     public Result<Rectangle> PutNextRectangle(Size rectangleSize)
         => TryPutNext(rectangleSize)
             .Then(RememberRectangle)
-            .ReplaceError(_ => "There are no more points in generator");
+            .RefineError("There are no more points in generator");
     
     private Rectangle RememberRectangle(Rectangle rect)
     {
